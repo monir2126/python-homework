@@ -1,0 +1,65 @@
+import jdatetime  # کتابخانه کار با تاریخ شمسی
+
+
+# تابع محاسبه سن
+def age(birth, today):
+
+    # محاسبه اولیه سال، ماه و روز
+    y = today.year - birth.year
+    m = today.month - birth.month
+    d = today.day - birth.day
+
+    # اگر روز منفی باشد، باید از ماه قبل قرض بگیریم
+    if d < 0:
+
+        # یک ماه از ماه کم می‌کنیم
+        m -= 1
+
+        # پیدا کردن ماه قبل
+        if today.month == 1:
+            # اگر فروردین باشد، ماه قبل اسفند سال قبل است
+            previous_month = jdatetime.date(today.year - 1, 12, 1)
+        else:
+            # در غیر این صورت فقط یک ماه کم می‌کنیم
+            previous_month = jdatetime.date(today.year, today.month - 1, 1)
+
+        # تعداد روزهای ماه قبل را پیدا می‌کنیم
+        d += previous_month.daysinmonth
+
+    # اگر ماه منفی باشد، باید از سال قرض بگیریم
+    if m < 0:
+
+        # یک سال کم می‌کنیم
+        y -= 1
+
+        # 12 ماه به ماه اضافه می‌کنیم
+        m += 12
+
+    # سال، ماه و روز را برمی‌گردانیم
+    return y, m, d
+
+
+# گرفتن سال تولد از کاربر
+year = int(input("سال تولد: "))
+
+# گرفتن ماه تولد از کاربر
+month = int(input("ماه تولد: "))
+
+# گرفتن روز تولد از کاربر
+day = int(input("روز تولد: "))
+
+
+# ساختن تاریخ تولد به صورت شمسی
+birth = jdatetime.date(year, month, day)
+
+
+# گرفتن تاریخ امروز به صورت خودکار
+today = jdatetime.date.today()
+
+
+# فرستادن تاریخ تولد و امروز به تابع
+y, m, d = age(birth, today)
+
+
+# نمایش نتیجه
+print(f"سن شما: {y} سال، {m} ماه و {d} روز")
